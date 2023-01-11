@@ -12,10 +12,10 @@ public class Webcam : MonoBehaviour
     
     private void Start()
     {
-        WebCamDevice[] devices = WebCamTexture.devices;
+        WebCamDevice[] devices = WebCamTexture.devices; // Liste des webcams
         WebCamTexture webcamTexture = new WebCamTexture();
         
-        if (devices.Length > 0)
+        if (devices.Length > 0) // Rempli le dropdown de toutes les webcams differentes
         {
             dropdown.ClearOptions();
             List<string> options = new List<string>();
@@ -27,7 +27,7 @@ public class Webcam : MonoBehaviour
         }
     }
 
-    public void ChargeCam()
+    public void ChargeCam() // Quand on click sur OK
     {
         WebCamDevice[] devices = WebCamTexture.devices;
         WebCamTexture webcamTexture = new WebCamTexture();
@@ -35,15 +35,15 @@ public class Webcam : MonoBehaviour
         if (devices.Length > 0)
         {
             webcamTexture.deviceName = devices[dropdown.value].name;
-            Renderer renderer = GetComponent<Renderer>();
-            renderer.material.mainTexture = webcamTexture;
+            Renderer renderer = GetComponent<Renderer>(); // On recupere le renderer de l'objet
+            renderer.material.mainTexture = webcamTexture; // On lui donne la texture de la webcam
             
             gameObject.GetComponent<RawImage>().texture = webcamTexture;
 
-            webcamTexture.Play();
+            webcamTexture.Play(); // On lance la webcam
             
-            resolution = new Vector2(webcamTexture.width, webcamTexture.height);
-            GetComponent<WebcamTaille>().ResolutionCam(); 
+            resolution = new Vector2(webcamTexture.width, webcamTexture.height); // On stocke la resolution de la webcam
+            GetComponent<WebcamTaille>().ResolutionCam(); // On appelle la fonction qui va changer la taille de la webcam
         }
     }
 }

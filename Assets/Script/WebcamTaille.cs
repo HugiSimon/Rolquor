@@ -12,13 +12,13 @@ public class WebcamTaille : MonoBehaviour
         float ratioMasque = Masque.GetComponent<RectTransform>().localScale.x / Masque.GetComponent<RectTransform>().localScale.y;
         float ratioWebcam = this.GetComponent<Webcam>().resolution.x / this.GetComponent<Webcam>().resolution.y;
         
-        if (ratioMasque > ratioWebcam)
+        if (ratioMasque > ratioWebcam) // Si le masque est plus large que la webcam
         {
-            this.GetComponent<RectTransform>().localScale = new Vector3(1, ratioMasque/ratioWebcam, 1);
+            this.GetComponent<RectTransform>().localScale = new Vector3(1, ratioMasque/ratioWebcam, 1); // On redimensionne la webcam pour qu'elle ait la même hauteur que le masque
         }
         else
         {
-            this.GetComponent<RectTransform>().localScale = new Vector3(ratioWebcam/ratioMasque, 1, 1);
+            this.GetComponent<RectTransform>().localScale = new Vector3(ratioWebcam/ratioMasque, 1, 1); // On redimensionne pour la même largeur que le masque
         }
     }
 }
