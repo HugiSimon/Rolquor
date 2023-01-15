@@ -5,12 +5,15 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using System.IO;
+using Unity.VisualScripting;
 
 
 public class WebcamPlayer : NetworkBehaviour
 {
     private GameObject _webcamRawImage;
     public int webcamIndex = 0;
+    public Canvas Canvas;
 
     private void Start()
     {
@@ -27,14 +30,32 @@ public class WebcamPlayer : NetworkBehaviour
         _webcamRawImage.GetComponent<RawImage>().texture = laWebcam;
         
         laWebcam.Play();
+
+        ParentServerRpc();
+    }
+    
+    [ServerRpc]
+    private void ParentServerRpc()
+    {
+        transform.SetParent(GameObject.Find("Canvas").transform);
+        Debug.Log("Parent : " + transform.parent.name);
         
-        //Si host
-        if (IsServer)
-        {
-            transform.SetParent(GameObject.Find("Canvas").transform);
-            
-            transform.localScale = new Vector3(1, 1, 1);
-            transform.localPosition = new Vector3(Random.Range(-810, 810), Random.Range(-440, 440), 0);
-        }
+        //PositionAleatoireClientRpc();
+    }
+
+    [ClientRpc]
+    public void PositionAleatoireClientRpc()
+    {
+        transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        
+        transform.localScale = new Vector3(1, 1, 1);
+        transform.localPosition = new Vector3(Random.Range(-810, 810), Random.Range(-440, 440), 0);
+        
+        Debug.Log("ClientRpc position");
+    }
+
+    private void Update()
+    {
+        //byte[] PNG = _webcamRawImage.GetComponent<RawImage>().texture.EncodeToPNG();
     }
 }

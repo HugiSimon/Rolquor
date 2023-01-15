@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5328222885874021915}
   - component: {fileID: 5328222885874021914}
   - component: {fileID: 5328222885874021910}
+  - component: {fileID: 5774200025098685973}
   m_Layer: 5
   m_Name: Cam
   m_TagString: Untagged
@@ -116,6 +117,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5774200025098685973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5328222885874021916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!1 &5328222887780462765
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b43c5465b366c8419eb16769660b9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  webcamIndex: 1
+  webcamIndex: 0
+  Canvas: {fileID: 0}
 --- !u!114 &3956028276951902855
 MonoBehaviour:
   m_ObjectHideFlags: 0
