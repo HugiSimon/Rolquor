@@ -50,13 +50,13 @@ public class WebcamPlayer : NetworkBehaviour
     [ClientRpc]
     public void PositionAleatoireClientRpc()
     {
-        if (transform.localScale.x > 2)
+        if (transform.localScale.x > 1)
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
         else
         {
-            transform.localScale = new Vector3(transform.localScale.x + 0.1f, transform.localScale.y + 0.1f, 1f);
+            transform.localScale = new Vector3(transform.localScale.x + 0.01f, transform.localScale.y + 0.01f, 1f);
         }
         
         transform.localPosition = new Vector3(Random.Range(-810, 810), Random.Range(-440, 440), 0);
