@@ -39,16 +39,26 @@ public class WebcamPlayer : NetworkBehaviour
     {
         transform.SetParent(GameObject.Find("Canvas").transform);
         Debug.Log("Parent : " + transform.parent.name);
-        
-        //PositionAleatoireClientRpc();
+
+        for (int i = transform.parent.childCount - 1; i >= 0; i--)
+        {
+            transform.parent.GetChild(i).GetComponent<WebcamPlayer>().PositionAleatoireClientRpc();
+            Debug.Log("Child no " + i + " : " + transform.parent.GetChild(i).name);
+        }
     }
 
     [ClientRpc]
     public void PositionAleatoireClientRpc()
     {
-        transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        if (transform.localScale.x > 2)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(transform.localScale.x + 0.1f, transform.localScale.y + 0.1f, 1f);
+        }
         
-        transform.localScale = new Vector3(1, 1, 1);
         transform.localPosition = new Vector3(Random.Range(-810, 810), Random.Range(-440, 440), 0);
         
         Debug.Log("ClientRpc position");
