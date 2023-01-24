@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   webcamIndex: 0
-  Canvas: {fileID: 0}
+  LeTestTexture: {fileID: 0}
 --- !u!114 &3956028276951902855
 MonoBehaviour:
   m_ObjectHideFlags: 0

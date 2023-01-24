@@ -13,7 +13,8 @@ public class WebcamPlayer : NetworkBehaviour
 {
     private GameObject _webcamRawImage;
     public int webcamIndex = 0;
-    public Canvas Canvas;
+    
+    private Texture2D _textureToSend;
 
     private void Start()
     {
@@ -28,7 +29,7 @@ public class WebcamPlayer : NetworkBehaviour
         component.material.mainTexture = laWebcam;
 
         _webcamRawImage.GetComponent<RawImage>().texture = laWebcam;
-        
+
         laWebcam.Play();
 
         ParentServerRpc();
@@ -66,6 +67,30 @@ public class WebcamPlayer : NetworkBehaviour
 
     private void Update()
     {
-        //byte[] PNG = _webcamRawImage.GetComponent<RawImage>().texture.EncodeToPNG();
+        if (IsOwner)
+        {
+            _textureToSend.SetPixels(((WebCamTexture) _webcamRawImage.GetComponent<RawImage>().texture).GetPixels());
+            _textureToSend.Apply();
+            
+            byte[] bytes = _textureToSend.EncodeToPNG();
+            //Debug.Log("bytes : " + bytes.Length);
+            
+            TextureServerRpc(bytes, (int)NetworkManager.Singleton.LocalClientId);
+        }
+    }
+    
+    [ServerRpc]
+    private void TextureServerRpc(byte[] bytes, int clientId)
+    {
+        TextureClientRpc(bytes, clientId);
+    }
+    
+    [ClientRpc]
+    private void TextureClientRpc(byte[] bytes, int clientId)
+    {
+        Texture2D texture = new Texture2D(1, 1);
+        texture.LoadImage(bytes);
+        
+        GameObject.Find("TestTexture").GetComponent<RawImage>().texture = texture;
     }
 }
