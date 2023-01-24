@@ -29,6 +29,7 @@ public class WebcamPlayer : NetworkBehaviour
         component.material.mainTexture = laWebcam;
 
         _webcamRawImage.GetComponent<RawImage>().texture = laWebcam;
+        _textureToSend = new Texture2D(laWebcam.width, laWebcam.height);
 
         laWebcam.Play();
 
