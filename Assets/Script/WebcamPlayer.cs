@@ -15,6 +15,8 @@ public class WebcamPlayer : NetworkBehaviour
     public int webcamIndex = 0;
 
     public byte[] bytes;
+    
+    public byte[][] bytesArray;
 
     private void Start()
     {
@@ -33,8 +35,6 @@ public class WebcamPlayer : NetworkBehaviour
         laWebcam.Play();
 
         ParentServerRpc();
-        
-        Array.Resize(ref bytes, laWebcam.width * laWebcam.height * 4);
     }
     
     [ServerRpc]
@@ -75,31 +75,73 @@ public class WebcamPlayer : NetworkBehaviour
             _textureToSend.SetPixels(((WebCamTexture) _webcamRawImage.GetComponent<RawImage>().texture).GetPixels());
             _textureToSend.Apply();
             
+            Texture2D resizedTexture = new Texture2D(300, 175);
+            resizedTexture = Resizing(_textureToSend, 300, 175);
+            
+            bytes = resizedTexture.EncodeToPNG();
+            
+            // Boucle pour n'evoyer que des paquets de 65000 bytes.Length
+            int bytesLong = bytes.Length, j = 0, taille = 65000;
+            Debug.Log("--------------bytesLong : " + bytesLong + "--------------");
+            for (int i = 0; i < bytesLong; i += taille)
+            {
+                byte[] bytesToSend = new byte[65000];
+                if (bytesLong - (taille * j) > taille)
+                {
+                    Array.Copy(bytes, i, bytesToSend, 0, taille);
+                    TextureServerRpc(bytesToSend, (int)NetworkManager.Singleton.LocalClientId, taille, j);
+                }
+                else
+                {
+                    Array.Copy(bytes, i, bytesToSend, 0, bytesLong - (taille * j));
+                    TextureServerRpc(bytesToSend, (int)NetworkManager.Singleton.LocalClientId, bytesLong - (taille * j), j);
+                }
+                j++;
+                Array.Clear(bytesToSend, 0, bytesToSend.Length);
+            }
+            Debug.Log("Nombre de paquets : " + j);
+            
             Array.Clear(bytes, 0, bytes.Length);
-            bytes = _textureToSend.EncodeToPNG();
-            Debug.Log("bytes : " + bytes.Length);
-            
-            
-            
-            TextureServerRpc(bytes, (int)NetworkManager.Singleton.LocalClientId);
+            Destroy(_textureToSend);
+            Destroy(resizedTexture);
         }
     }
     
     [ServerRpc]
-    private void TextureServerRpc(byte[] bytesTexture, int clientId)
+    private void TextureServerRpc(byte[] bytesTexture, int clientId, int taillePaquet, int nombrePaquets)
     {
-        Debug.Log("ServerRpc texture " + bytesTexture.Length);
-        //TextureClientRpc(bytesTexture, clientId);
+        TextureClientRpc(bytesTexture, clientId, taillePaquet, nombrePaquets);
     }
     
     [ClientRpc]
-    private void TextureClientRpc(byte[] bytesLaTexture, int clientId)
+    private void TextureClientRpc(byte[] bytesLaTexture, int clientId, int taillePaquet, int nombrePaquets)
     {
-        Texture2D texture = new Texture2D(1, 1);
-        texture.LoadImage(bytesLaTexture);
+        Debug.Log("taillePaquet : " + taillePaquet + " nombrePaquets : " + nombrePaquets);
         
-        Debug.Log("texture : " + texture.width + "x" + texture.height);
-        
-        GameObject.Find("TestTexture").GetComponent<RawImage>().texture = texture;
+        Array.Copy(bytesLaTexture, 0, bytesArray[clientId], 65000 * nombrePaquets, taillePaquet);
+        if (taillePaquet < 65000)
+        {
+            Texture2D texture = new Texture2D(300, 175);
+            texture.LoadImage(bytesArray[clientId]);
+            GameObject.Find("TestTexture").GetComponent<RawImage>().texture = texture;
+            
+            Array.Clear(bytesArray[clientId], 0, bytesArray[clientId].Length);
+        }
+    }
+    
+    public static Texture2D Resizing(Texture2D source, int newWidth, int newHeight)
+    {
+        source.filterMode = FilterMode.Bilinear;
+        RenderTexture rt = RenderTexture.GetTemporary(newWidth, newHeight);
+        rt.filterMode = FilterMode.Bilinear;
+        RenderTexture.active = rt;
+        Graphics.Blit(source, rt);
+        Texture2D nTex = new Texture2D(newWidth, newHeight);
+        nTex.ReadPixels(new Rect(0, 0, newWidth, newHeight), 0,0);
+        nTex.Apply();
+        RenderTexture.active = null;
+        RenderTexture.ReleaseTemporary(rt);
+        return nTex;
     }
 }
+

@@ -265,6 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   webcamIndex: 0
   bytes: 
+  resizeTexture: {fileID: 0}
 --- !u!114 &3956028276951902855
 MonoBehaviour:
   m_ObjectHideFlags: 0
