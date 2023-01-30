@@ -35,6 +35,8 @@ public class WebcamPlayer : NetworkBehaviour
         laWebcam.Play();
 
         ParentServerRpc();
+
+        bytesArray = new byte[5][];
     }
     
     [ServerRpc]
@@ -82,7 +84,6 @@ public class WebcamPlayer : NetworkBehaviour
             
             // Boucle pour n'evoyer que des paquets de 65000 bytes.Length
             int bytesLong = bytes.Length, j = 0, taille = 65000;
-            Debug.Log("--------------bytesLong : " + bytesLong + "--------------");
             for (int i = 0; i < bytesLong; i += taille)
             {
                 byte[] bytesToSend = new byte[65000];
@@ -99,7 +100,6 @@ public class WebcamPlayer : NetworkBehaviour
                 j++;
                 Array.Clear(bytesToSend, 0, bytesToSend.Length);
             }
-            Debug.Log("Nombre de paquets : " + j);
             
             Array.Clear(bytes, 0, bytes.Length);
             Destroy(_textureToSend);
@@ -116,16 +116,14 @@ public class WebcamPlayer : NetworkBehaviour
     [ClientRpc]
     private void TextureClientRpc(byte[] bytesLaTexture, int clientId, int taillePaquet, int nombrePaquets)
     {
-        Debug.Log("taillePaquet : " + taillePaquet + " nombrePaquets : " + nombrePaquets);
-        
-        Array.Copy(bytesLaTexture, 0, bytesArray[clientId], 65000 * nombrePaquets, taillePaquet);
-        if (taillePaquet < 65000)
+        GameObject[] testTexture = GameObject.FindGameObjectsWithTag("TestTexture");
+        for (int i = 0; i < testTexture.Length; i++)
         {
-            Texture2D texture = new Texture2D(300, 175);
-            texture.LoadImage(bytesArray[clientId]);
-            GameObject.Find("TestTexture").GetComponent<RawImage>().texture = texture;
-            
-            Array.Clear(bytesArray[clientId], 0, bytesArray[clientId].Length);
+            if (testTexture[i].GetComponent<LoadTexture>().ID == clientId)
+            {
+                testTexture[i].GetComponent<LoadTexture>().intergreTableau(bytesLaTexture, taillePaquet, nombrePaquets);
+                Debug.Log("Trouvé");
+            }
         }
     }
     
