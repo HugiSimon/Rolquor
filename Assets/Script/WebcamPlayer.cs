@@ -122,7 +122,6 @@ public class WebcamPlayer : NetworkBehaviour
             if (testTexture[i].GetComponent<LoadTexture>().ID == clientId)
             {
                 testTexture[i].GetComponent<LoadTexture>().intergreTableau(bytesLaTexture, taillePaquet, nombrePaquets);
-                Debug.Log("Trouvé");
             }
         }
     }
