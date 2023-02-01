@@ -1030,6 +1030,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resolution: {x: 0, y: 0}
   dropdown: {fileID: 2097190956}
+  deviceIndex: -1
 --- !u!23 &1236690537
 MeshRenderer:
   m_ObjectHideFlags: 0

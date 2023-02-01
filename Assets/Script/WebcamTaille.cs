@@ -10,7 +10,7 @@ public class WebcamTaille : MonoBehaviour
     public void ResolutionCam()
     {
         float ratioMasque = Masque.GetComponent<RectTransform>().localScale.x / Masque.GetComponent<RectTransform>().localScale.y;
-        float ratioWebcam = this.GetComponent<Webcam>().resolution.x / this.GetComponent<Webcam>().resolution.y;
+        float ratioWebcam = this.GetComponent<WebcamLoad>().resolution.x / this.GetComponent<WebcamLoad>().resolution.y;
         
         if (ratioMasque > ratioWebcam) // Si le masque est plus large que la webcam
         {
