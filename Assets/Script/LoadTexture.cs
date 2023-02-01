@@ -11,7 +11,6 @@ public class LoadTexture : MonoBehaviour
 
     private void Start()
     {
-        //Taille de laTextures maximal est de 1000000
         laTextures = new byte[1000000];
     }
 

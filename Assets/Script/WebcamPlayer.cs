@@ -15,8 +15,6 @@ public class WebcamPlayer : NetworkBehaviour
     public int webcamIndex = 0;
 
     public byte[] bytes;
-    
-    public byte[][] bytesArray;
 
     private void Start()
     {
@@ -35,8 +33,6 @@ public class WebcamPlayer : NetworkBehaviour
         laWebcam.Play();
 
         ParentServerRpc();
-
-        bytesArray = new byte[5][];
     }
     
     [ServerRpc]
@@ -55,17 +51,17 @@ public class WebcamPlayer : NetworkBehaviour
     [ClientRpc]
     public void PositionAleatoireClientRpc()
     {
-        if (transform.localScale.x > 1)
+        if (transform.localScale.x > 1.5f)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(1.5f, 1.5f, 1f);
         }
         else
         {
             transform.localScale = new Vector3(transform.localScale.x + 0.01f, transform.localScale.y + 0.01f, 1f);
         }
         
-        transform.localPosition = new Vector3(Random.Range(-810, 810), Random.Range(-440, 440), 0);
-        
+        transform.localPosition = new Vector3(1000, 1000, 0);
+
         //Debug.Log("ClientRpc position");
     }
 
