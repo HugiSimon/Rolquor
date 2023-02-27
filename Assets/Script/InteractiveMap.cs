@@ -42,6 +42,8 @@ public class InteractiveMap : MonoBehaviour
             GetComponent<RectTransform>().transform.localScale = new Vector3(parent.GetComponent<RectTransform>().rect.height / GetComponent<RectTransform>().rect.height, parent.GetComponent<RectTransform>().rect.height / GetComponent<RectTransform>().rect.height, 1);
         }
         _actualScale = GetComponent<RectTransform>().localScale.x;
+        
+        gameObject.GetComponent<MapInGame>().UpdateMax();
     }
     
     // Quand on scroll sur la carte (image) on zoom

@@ -65,7 +65,7 @@ public class WebcamPlayer : NetworkBehaviour
         //Debug.Log("ClientRpc position");
     }
 
-    private void Update()
+    /*private void Update()
     {
         if (IsOwner)
         {
@@ -101,7 +101,7 @@ public class WebcamPlayer : NetworkBehaviour
             Destroy(_textureToSend);
             Destroy(resizedTexture);
         }
-    }
+    }*/
     
     [ServerRpc]
     private void TextureServerRpc(byte[] bytesTexture, int clientId, int taillePaquet, int nombrePaquets)
