@@ -9,6 +9,9 @@ public class InteractiveMap : MonoBehaviour
     public float zoom = 1;
     [SerializeField] private CursonOn curseur;
     
+    public bool tropLong = false;
+    public bool tropLarge = false;
+    
     void Start()
     {
         adaptScale();
@@ -35,10 +38,12 @@ public class InteractiveMap : MonoBehaviour
 
         if (GetComponent<RectTransform>().rect.width < parent.GetComponent<RectTransform>().rect.width)
         {
+            tropLong = true;
             GetComponent<RectTransform>().transform.localScale = new Vector3(parent.GetComponent<RectTransform>().rect.width / GetComponent<RectTransform>().rect.width, parent.GetComponent<RectTransform>().rect.width / GetComponent<RectTransform>().rect.width, 1);
         }
         if (GetComponent<RectTransform>().rect.height * GetComponent<RectTransform>().localScale.x < parent.GetComponent<RectTransform>().rect.height)
         {
+            tropLarge = true;
             GetComponent<RectTransform>().transform.localScale = new Vector3(parent.GetComponent<RectTransform>().rect.height / GetComponent<RectTransform>().rect.height, parent.GetComponent<RectTransform>().rect.height / GetComponent<RectTransform>().rect.height, 1);
         }
         _actualScale = GetComponent<RectTransform>().localScale.x;

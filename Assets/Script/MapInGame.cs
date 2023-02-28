@@ -36,7 +36,7 @@ public class MapInGame : MonoBehaviour
         position.x -= Screen.width / 2;
         position.y -= Screen.height / 2;
         
-        Debug.Log(transform.parent.GetComponent<ScrollRect>().horizontalNormalizedPosition + " " + transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition);
+        Debug.Log("horizontal:" + transform.parent.GetComponent<ScrollRect>().horizontalNormalizedPosition + " vertical:" + transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition);
 
         marqueur.transform.localPosition = new Vector3(-174.6f * position.x / -313.18f, (-147.3f * position.y / -250.10f) + ((Screen.height / 2) * (transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition - 0.5f)), 0);
     }
